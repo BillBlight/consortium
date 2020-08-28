@@ -131,15 +131,6 @@ namespace OpenSim.Region.CoreModules.World.Land
             return m_landManagementModule != null ? m_landManagementModule.GetLandObjectClipedXY(x, y) : null;
         }
 
-        public ILandObject GetLandObjectClipedXY(float x, float y)
-        {
-            if (m_landManagementModule != null)
-            {
-                return m_landManagementModule.GetLandObjectClipedXY(x, y);
-            }
-            return null;
-        }
-
         public List<ILandObject> AllParcels()
         {
             return m_landManagementModule != null ? m_landManagementModule.AllParcels() : new List<ILandObject>();
