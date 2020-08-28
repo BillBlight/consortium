@@ -2683,7 +2683,7 @@ namespace OpenSim.Region.ClientStack.Linden
 
                 m_timeoutTimer = new System.Timers.Timer();
                 m_timeoutTimer.Elapsed += TimedOut;
-                m_timeoutTimer.Interval = 120000;
+                m_timeoutTimer.Interval = 300000;
                 m_timeoutTimer.AutoReset = false;
                 m_timeoutTimer.Start();
 
