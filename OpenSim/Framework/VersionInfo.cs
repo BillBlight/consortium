@@ -31,7 +31,7 @@ namespace OpenSim
     {
         public const string VersionNumber = "0.9.2.0";
         public const string AssemblyVersionNumber = "0.9.2.0";
-        public const string ConsortiumVersionNumber = "1.0";
+        public const string YCFSVersionNumber = "1.0.1";
 
         public const Flavour VERSION_FLAVOUR = Flavour.Dev;
 
@@ -49,12 +49,12 @@ namespace OpenSim
 
         public static string Version
         {
-            get { return GetVersionString(ConsortiumVersionNumber, VERSION_FLAVOUR); }
+            get { return GetVersionString(YCFSVersionNumber, VERSION_FLAVOUR); }
         }
 
         public static string GetVersionString(string versionNumber, Flavour flavour)
         {
-            string versionString = "Consortium " + versionNumber + " " + flavour;
+            string versionString = "YCFS " + versionNumber + " " + flavour;
             return versionString.PadRight(VERSIONINFO_VERSION_LENGTH);
         }
 
