@@ -31,7 +31,7 @@ namespace OpenSim
     {
         public const string VersionNumber = "0.9.2.0";
         public const string AssemblyVersionNumber = "0.9.2.0";
-        public const string YCFSVersionNumber = "1.0.1";
+        public const string YCFSVersionNumber = "0.1.9.2";
 
         public const Flavour VERSION_FLAVOUR = Flavour.Dev;
 
