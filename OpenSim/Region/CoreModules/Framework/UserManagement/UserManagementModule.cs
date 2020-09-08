@@ -520,8 +520,8 @@ namespace OpenSim.Region.CoreModules.Framework.UserManagement
                         userdata.ServerURLs = new Dictionary<string, object>();
                     }
 
-                    if (userdata.ServerURLs != null && userdata.ServerURLs.ContainsKey(serverType) && userdata.ServerURLs[serverType] != null)
-                        return userdata.ServerURLs[serverType].ToString();
+                    if (userdata.ServerURLs != null && userdata.ServerURLs.TryGetValue(serverType, out object ourl) && ourl != null)
+                        return ourl.ToString();
                 }
             }
             return string.Empty;
@@ -1077,7 +1077,7 @@ namespace OpenSim.Region.CoreModules.Framework.UserManagement
                 }
                 else
                 {
-                    oldUser.FirstName = firstname.Replace(" ", ".") + "." + firstname.Replace(" ", ".");
+                    oldUser.FirstName = firstname + "." + lastname.Replace(" ", ".");
                     oldUser.LastName = "@" + uri.Authority;
                     oldUser.HomeURL = uri.AbsoluteUri;
                     oldUser.IsLocal = false;
@@ -1085,7 +1085,7 @@ namespace OpenSim.Region.CoreModules.Framework.UserManagement
             }
             else
             {
-                oldUser.FirstName = firstname.Replace(" ", ".") + "." + firstname.Replace(" ", ".");
+                oldUser.FirstName = firstname + "." + lastname.Replace(" ", ".");
                 oldUser.LastName = "UMMM1Unknown";
                 oldUser.IsLocal = true;
                 oldUser.HomeURL = string.Empty;
