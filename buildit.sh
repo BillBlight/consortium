@@ -31,6 +31,7 @@ echo "Running Prebuild"
 ./runprebuild.sh
 
 echo "Building Release, MS Debug Info sucks on linux"
+STARTED=$(date)
 msbuild -m:$NUMCORES /p:Configuration=Release /verbosity:minimal
 BUILDCODE=$?
 
@@ -41,9 +42,14 @@ The Build encoutered and error.\e[0m
 "
 exit 1
 else
+FIN=$(date)
+TOTAL=$(( $(date -d "$FIN" "+%s") - $(date -d "$STARTED" "+%s") ))
+
 echo -e "
 \e[30;48;5;82m
-The Build appears to have suceeded\e[0m
-"
+The Build appears to have suceeded
+and took"
+printf '%dm:%ds\n' $(($TOTAL%3600/60)) $(($TOTAL%60))
+echo -e "\e[0m"
 fi
 echo "done"
