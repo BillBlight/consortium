@@ -22,6 +22,7 @@ Consortium has the following features that are not yet adopted by OpenSim:
 - IP and Hardware Banning    
 - Updated Top Scripts floater   
 - ToS prompt during the login   
+- Custom buildit.sh makes building easy.
 
 As well as some minor fixes not worth mentioning.
 
