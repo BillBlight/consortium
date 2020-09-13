@@ -1,7 +1,7 @@
 # Overview
 Consortium is a fork of OpenSim. It is the "successor" to Mobius, osCore2 and TachyonSim. 
 
-***THIS WILL ONLY CURRENLTY BUILD WITH MONO 6.x***
+***THIS MAY ONLY CURRENLTY BUILD WITH MONO 6.x or .NET 4.8***
 
 The goals for Consortium are simple, we want to:   
 - Add support for more of the features already in the viewer
