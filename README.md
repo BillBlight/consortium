@@ -1,4 +1,8 @@
 # Overview
+The Majority of changes in this fork should be credited to Stolen Ruby.
+
+I, Bill Blight, have only made minor personal changes to this fork.
+
 Consortium is a fork of OpenSim. It is the "successor" to Mobius, osCore2 and TachyonSim. 
 
 ***THIS MAY ONLY CURRENLTY BUILD WITH MONO 6.x or .NET 4.8***
@@ -13,7 +17,7 @@ Consortium's current "claim to fame" is Display Name support and Experience Tool
 
 # Additional Features
 Consortium has the following features that are not yet adopted by OpenSim:
-- Display Names   
+- Display Names  
 - Experience Tools   
 - New Region Restart Notice    
 - Port range for Simulators    
