@@ -5387,7 +5387,7 @@ namespace OpenSim.Region.Framework.Scenes
 
         public void SendUpdateToClient(IClientAPI remoteClient, PrimUpdateFlags update)
         {
-            if (ParentGroup.IsDeleted)
+            if (ParentGroup.IsDeleted || !remoteClient.IsActive)
                 return;
 
             if (Animations == null)
