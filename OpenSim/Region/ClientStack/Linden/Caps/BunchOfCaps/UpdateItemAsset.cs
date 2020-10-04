@@ -348,11 +348,10 @@ namespace OpenSim.Region.ClientStack.Linden
             private UUID m_inventoryItemID;
             private UUID m_primID;
             private bool m_isScriptRunning;
-            private UUID m_experienceKey;
             private bool m_dumpAssetToFile;
             public IPAddress m_remoteAddress;
 
-            public TaskInventoryScriptUpdater(UUID inventoryItemID, UUID primID, bool isScriptRunning, UUID experience_id,
+            public TaskInventoryScriptUpdater(UUID inventoryItemID, UUID primID, bool isScriptRunning,
                                                 string path, IHttpServer httpServer, IPAddress address,
                                                 bool dumpAssetToFile) : base(httpServer, path)
             {
@@ -360,7 +359,6 @@ namespace OpenSim.Region.ClientStack.Linden
                 m_inventoryItemID = inventoryItemID;
                 m_primID = primID;
                 m_isScriptRunning = isScriptRunning;
-                m_experienceKey = experience_id;
                 m_remoteAddress = address;
                 Start(30000);
             }
@@ -402,7 +400,7 @@ namespace OpenSim.Region.ClientStack.Linden
                     LLSDTaskScriptUploadComplete uploadComplete = new LLSDTaskScriptUploadComplete();
 
                     ArrayList errors = new ArrayList();
-                    OnUpLoad?.Invoke(m_inventoryItemID, m_primID, m_isScriptRunning, m_experienceKey, data, ref errors);
+                    OnUpLoad?.Invoke(m_inventoryItemID, m_primID, m_isScriptRunning, data, ref errors);
 
                     uploadComplete.new_asset = m_inventoryItemID;
                     uploadComplete.compiled = errors.Count > 0 ? false : true;

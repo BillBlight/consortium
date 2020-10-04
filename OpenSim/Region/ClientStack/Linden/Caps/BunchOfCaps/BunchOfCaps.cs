@@ -673,7 +673,7 @@ namespace OpenSim.Region.ClientStack.Linden
             if(!IsAtestUpload && m_enableModelUploadTextureToInventory)
                 texturesFolder = llsdRequest.texture_folder_id;
 
-            AssetUploader uploader =
+AssetUploader uploader =
                 new AssetUploader(assetName, assetDes, newAsset, newInvItem, parentFolder, llsdRequest.inventory_type,
                         llsdRequest.asset_type, uploaderPath, m_HostCapsObj.HttpListener, m_dumpAssetsToFile, cost,
                         texturesFolder, nreqtextures, nreqmeshs, nreqinstances, IsAtestUpload,
