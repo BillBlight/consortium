@@ -64,9 +64,7 @@ namespace OpenSim.Framework
             AllowedAccess = 500,
             AllowedGroups = 63,
             EstateBans = 500,
-            EstateManagers = 10,
-            AllowedExperiences = 8,
-            KeyExperiences = 8
+            EstateManagers = 10
         }
 
         [Flags]public enum TeleportFlags : uint

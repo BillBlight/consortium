@@ -462,7 +462,6 @@ namespace OpenSim.Region.OptionalModules.World.NPC
         public event EstateRestartSimRequest OnEstateRestartSimRequest;
         public event EstateChangeCovenantRequest OnEstateChangeCovenantRequest;
         public event UpdateEstateAccessDeltaRequest OnUpdateEstateAccessDeltaRequest;
-        public event UpdateEstateExperienceDeltaRequest OnUpdateEstateExperienceDeltaRequest;
         public event SimulatorBlueBoxMessageRequest OnSimulatorBlueBoxMessageRequest;
         public event EstateBlueBoxMessageRequest OnEstateBlueBoxMessageRequest;
         public event EstateDebugRegionRequest OnEstateDebugRegionRequest;
@@ -1092,7 +1091,7 @@ namespace OpenSim.Region.OptionalModules.World.NPC
         {
         }
 
-        public void SendScriptQuestion(UUID objectID, string taskName, string ownerName, UUID itemID, int question, UUID experience)
+        public void SendScriptQuestion(UUID objectID, string taskName, string ownerName, UUID itemID, int question)
         {
         }
         public void SendHealth(float health)
@@ -1100,10 +1099,6 @@ namespace OpenSim.Region.OptionalModules.World.NPC
         }
 
         public void SendEstateList(UUID invoice, int code, UUID[] Data, uint estateID)
-        {
-        }
-
-        public void SendEstateExperiences(UUID invoice, UUID[] allowed, UUID[] key, uint estateID)
         {
         }
 
@@ -1412,8 +1407,5 @@ namespace OpenSim.Region.OptionalModules.World.NPC
             return 0;
         }
 
-        public void SendGenericMessageForExperience(UUID experience_id, UUID avatar_id, int action, string obj_name, string parcel, bool is_attachment)
-        {
-        }
     }
 }

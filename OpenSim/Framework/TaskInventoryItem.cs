@@ -110,8 +110,6 @@ namespace OpenSim.Framework
             }
         }
 
-        public UUID ExperienceID { get; set; }
-
         public string CreatorData // = <profile url>;<name>
         {
             get { return _creatorData; }

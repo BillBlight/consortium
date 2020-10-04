@@ -1123,7 +1123,7 @@ namespace OpenSim.Region.Framework.Scenes
             ControllingClient = client;
             Firstname = ControllingClient.FirstName;
             Lastname = ControllingClient.LastName;
-            m_name = String.Format("{0} {1}", Firstname, Lastname);
+            Name = String.Format("{0} {1}", Firstname, Lastname);
             m_uuid = client.AgentId;
             LocalId = m_scene.AllocateLocalId();
             LegacySitOffsets = m_scene.LegacySitOffsets;
@@ -2691,23 +2691,7 @@ namespace OpenSim.Region.Framework.Scenes
 
             if ((flags & AgentManager.ControlFlags.AGENT_CONTROL_STAND_UP) != 0)
             {
-                bool satOnObject = IsSatOnObject;
-                SceneObjectPart part = ParentPart;
-                if (satOnObject)
-                {
-                    if (!part.AllowUnsit && Scene.ExperienceModule.GetExperiencePermission(remoteClient.AgentId, part.ExperienceUsedForSit) == ExperiencePermission.Allowed)
-                    {
-                        ControllingClient.SendAgentAlertMessage(string.Format("'{0}' will not allow you to stand at this time.", part.Name), false);
-                    }
-                    else
-                    {
-                        StandUp();
-                    }
-                }
-                else if (SitGround)
-                {
-                    StandUp();
-                }
+                StandUp();
             }
 
             // Raycast from the avatar's head to the camera to see if there's anything blocking the view
@@ -3548,7 +3532,7 @@ namespace OpenSim.Region.Framework.Scenes
             //m_scene.EventManager.TriggerParcelPrimCountTainted(); // update select/ sat on
         }
 
-        public void SitAgent(UUID targetID, Vector3 offset, UUID experience)
+        public void HandleAgentRequestSit(IClientAPI remoteClient, UUID agentID, UUID targetID, Vector3 offset)
         {
             if (IsChildAgent)
                 return;
@@ -3558,15 +3542,6 @@ namespace OpenSim.Region.Framework.Scenes
                 if (ParentPart.UUID == targetID)
                     return; // already sitting here, ignore
 
-                if (ParentPart.AllowUnsit == false && ParentPart.ExperienceUsedForSit != UUID.Zero && experience == UUID.Zero)
-                {
-                    if (Scene.ExperienceModule.GetExperiencePermission(this.UUID, ParentPart.ExperienceUsedForSit) == ExperiencePermission.Allowed)
-                    {
-                        ControllingClient.SendAgentAlertMessage(string.Format("'{0}' will not allow you to change your seat at this time.", ParentPart.Name), false);
-                        return;
-                    }
-                }
-
                 StandUp();
             }
 
@@ -3574,17 +3549,6 @@ namespace OpenSim.Region.Framework.Scenes
 
             if (part != null)
             {
-                if (part.ScriptedSitOnly && experience == UUID.Zero)
-                {
-                    ControllingClient.SendAgentAlertMessage("There is no suitable surface to sit on, try another spot.", false);
-                    return;
-                }
-
-                if (experience != UUID.Zero)
-                {
-                    part.ExperienceUsedForSit = experience;
-                }
-
                 m_requestedSitTargetID = part.LocalId;
                 m_requestedSitTargetUUID = part.UUID;
             }
@@ -3594,11 +3558,6 @@ namespace OpenSim.Region.Framework.Scenes
             }
 
             SendSitResponse(targetID, offset, Quaternion.Identity);
-        }
-
-        public void HandleAgentRequestSit(IClientAPI remoteClient, UUID agentID, UUID targetID, Vector3 offset)
-        {
-            SitAgent(targetID, offset, UUID.Zero);
         }
 
         // returns  false if does not suport so older sit can be tried
