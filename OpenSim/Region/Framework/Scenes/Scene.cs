@@ -4193,10 +4193,6 @@ namespace OpenSim.Region.Framework.Scenes
                 CacheUserName(null, acd);
             }
 
-            if (CapsModule != null)
-            {
-                CapsModule.ActivateCaps(acd.circuitcode);
-            }
 
             //if (vialogin)
             //{
@@ -4235,6 +4231,11 @@ namespace OpenSim.Region.Framework.Scenes
                     m_authenticateHandler.RemoveCircuit(acd);
                     return false;
                 }
+            }
+
+            if (CapsModule != null)
+            {
+                CapsModule.ActivateCaps(acd.circuitcode);
             }
 
             return true;
