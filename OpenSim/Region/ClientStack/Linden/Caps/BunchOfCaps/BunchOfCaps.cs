@@ -2405,24 +2405,24 @@ AssetUploader uploader =
 
                     //m_log.InfoFormat("{0} {1} can change their name on {2}", nameInfo.FirstName, nameInfo.LastName, test.ToString());
 
-                    LLSDxmlEncode.AddMap(lsl);
-                    LLSDxmlEncode.AddElem("display_name_next_update", test, lsl); // fix this
-                    LLSDxmlEncode.AddElem("display_name_expires", test, lsl); // fix this
-                    LLSDxmlEncode.AddElem("display_name", displayname, lsl);
-                    LLSDxmlEncode.AddElem("legacy_first_name", firstname, lsl);
-                    LLSDxmlEncode.AddElem("legacy_last_name", lastname, lsl);
-                    LLSDxmlEncode.AddElem("username", username, lsl);
-                    LLSDxmlEncode.AddElem("id", kvp.Key, lsl);
-                    LLSDxmlEncode.AddElem("is_display_name_default", is_default_name, lsl);
-                    LLSDxmlEncode.AddEndMap(lsl);
+                    LLSDxmlEncode2.AddMap(lsl);
+                    LLSDxmlEncode2.AddElem("display_name_next_update", test, lsl); // fix this
+                    LLSDxmlEncode2.AddElem("display_name_expires", test, lsl); // fix this
+                    LLSDxmlEncode2.AddElem("display_name", displayname, lsl);
+                    LLSDxmlEncode2.AddElem("legacy_first_name", firstname, lsl);
+                    LLSDxmlEncode2.AddElem("legacy_last_name", lastname, lsl);
+                    LLSDxmlEncode2.AddElem("username", username, lsl);
+                    LLSDxmlEncode2.AddElem("id", kvp.Key, lsl);
+                    LLSDxmlEncode2.AddElem("is_display_name_default", is_default_name, lsl);
+                    LLSDxmlEncode2.AddEndMap(lsl);
                     ct++;
                 }
-                LLSDxmlEncode.AddEndArray(lsl);
+                LLSDxmlEncode2.AddEndArray(lsl);
             }
         
-            LLSDxmlEncode.AddEndMap(lsl);
+            LLSDxmlEncode2.AddEndMap(lsl);
 
-            httpResponse.RawBuffer = LLSDxmlEncode.EndToNBBytes(lsl);
+            httpResponse.RawBuffer = LLSDxmlEncode2.EndToNBBytes(lsl);
             httpResponse.ContentType = "application/llsd+xml";
             httpResponse.StatusCode = (int)HttpStatusCode.OK;
         }
