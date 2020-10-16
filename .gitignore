@@ -78,7 +78,8 @@ bin/OpenSimConsoleHistory.txt
 bin/RobustConsoleHistory.txt
 bin/*.Tests.log
 bin/*.manifest
-bin/crashes/
+bin/crashesn/
+bin/OpenSim.ini
 Examples/*.dll
 OpenSim.build
 Consortium.sln
