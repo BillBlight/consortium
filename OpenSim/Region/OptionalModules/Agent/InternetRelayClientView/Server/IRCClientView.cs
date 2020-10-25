@@ -824,6 +824,7 @@ namespace OpenSim.Region.OptionalModules.Agent.InternetRelayClientView.Server
         public event EstateRestartSimRequest OnEstateRestartSimRequest;
         public event EstateChangeCovenantRequest OnEstateChangeCovenantRequest;
         public event UpdateEstateAccessDeltaRequest OnUpdateEstateAccessDeltaRequest;
+        public event UpdateEstateExperienceDeltaRequest OnUpdateEstateExperienceDeltaRequest;
         public event SimulatorBlueBoxMessageRequest OnSimulatorBlueBoxMessageRequest;
         public event EstateBlueBoxMessageRequest OnEstateBlueBoxMessageRequest;
         public event EstateDebugRegionRequest OnEstateDebugRegionRequest;
@@ -1259,7 +1260,7 @@ namespace OpenSim.Region.OptionalModules.Agent.InternetRelayClientView.Server
 
         }
 
-        public void SendScriptQuestion(UUID taskID, string taskName, string ownerName, UUID itemID, int question)
+        public void SendScriptQuestion(UUID taskID, string taskName, string ownerName, UUID itemID, int question, UUID experience)
         {
 
         }
@@ -1270,6 +1271,11 @@ namespace OpenSim.Region.OptionalModules.Agent.InternetRelayClientView.Server
         }
 
         public void SendEstateList(UUID invoice, int code, UUID[] Data, uint estateID)
+        {
+
+        }
+
+        public void SendEstateExperiences(UUID invoice, UUID[] allowed, UUID[] key, uint estateID)
         {
 
         }
@@ -1787,5 +1793,8 @@ namespace OpenSim.Region.OptionalModules.Agent.InternetRelayClientView.Server
             return 0;
         }
 
+        public void SendGenericMessageForExperience(UUID experience_id, UUID avatar_id, int action, string obj_name, string parcel, bool is_attachment)
+        {
+        }
     }
 }

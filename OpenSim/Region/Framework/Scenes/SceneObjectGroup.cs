@@ -89,8 +89,11 @@ namespace OpenSim.Region.Framework.Scenes
 
         path_update = 40,
 
+        experience_permissions = 45,
+        experience_permissions_denied = 46,
+
         // marks highest numbered event
-        Size = 41
+        Size = 47
     }
 
     // this is not the right place for this
@@ -142,6 +145,8 @@ namespace OpenSim.Region.Framework.Scenes
 
         path_update = 1UL << 40,
 
+        experience_permissions = 1UL << 45,
+        experience_permissions_denied = 1UL << 46,
 
         anytouch = touch | touch_end | touch_start,
         anyTarget = at_target | not_at_target | at_rot_target | not_at_rot_target,
@@ -313,6 +318,12 @@ namespace OpenSim.Region.Framework.Scenes
         /// Is this scene object acting as an attachment?
         /// </summary>
         public bool IsAttachment { get; set; }
+
+        /// <summary>
+        /// What experience temp attached this item
+        /// This will not be set if the object wasn't temp attached
+        /// </summary>
+        public UUID AttachedExperienceID { get; set; }
 
         /// <summary>
         /// The avatar to which this scene object is attached.

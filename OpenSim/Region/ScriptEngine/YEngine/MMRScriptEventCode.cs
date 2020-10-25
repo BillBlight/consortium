@@ -84,7 +84,10 @@ namespace OpenSim.Region.ScriptEngine.Yengine
         //
         path_update = 40,
 
+        experience_permissions = 45,
+        experience_permissions_denied = 46,
+
         // marks highest numbered event
-        Size = 41
+        Size = 47
     }
 }

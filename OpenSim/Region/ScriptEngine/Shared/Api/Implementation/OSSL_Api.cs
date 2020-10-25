@@ -158,7 +158,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
         protected IUrlModule m_UrlModule = null;
         protected ISoundModule m_SoundModule = null;
         protected IEnvironmentModule m_envModule = null;
-        protected IGroupsModule m_groupsModule= null;
+        protected IGroupsModule m_groupsModule = null;
         public void Initialize(IScriptEngine scriptEngine, SceneObjectPart host, TaskInventoryItem item)
         {
             //private init
@@ -6012,6 +6012,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
             m_envModule.StoreOnRegion(null);
             m_envModule.WindlightRefresh(transition);
             return 1;
+        }
+
+        public LSL_Float osPerlinNoise2D(LSL_Float x, LSL_Float y, LSL_Integer octaves, LSL_Float persistence)
+        {
+            m_host.AddScriptLPS(1);
+
+            return new LSL_Float(TerrainUtil.PerlinNoise2D(x, y, octaves, persistence));
         }
     }
 }

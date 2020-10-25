@@ -67,14 +67,14 @@ namespace OpenSim.Region.ClientStack.Linden
         int cost, UUID texturesFolder, int nreqtextures, int nreqmeshs, int nreqinstances,
         bool IsAtestUpload, ref string error, ref int nextOwnerMask, ref int groupMask, ref int everyoneMask, int[] meshesSides);
 
-    public delegate void UpdateTaskScript(UUID itemID, UUID primID, bool isScriptRunning, byte[] data, ref ArrayList errors);
+    public delegate void UpdateTaskScript(UUID itemID, UUID primID, bool isScriptRunning, UUID experience, byte[] data, ref ArrayList errors);
 
     public delegate void NewInventoryItem(UUID userID, InventoryItemBase item, uint cost);
 
     public delegate void NewAsset(AssetBase asset);
 
     public delegate ArrayList TaskScriptUpdatedCallback(UUID userID, UUID itemID, UUID primID,
-                                                   bool isScriptRunning, byte[] data);
+                                                   bool isScriptRunning, UUID experience, byte[] data);
 
     /// <summary>
     /// XXX Probably not a particularly nice way of allow us to get the scene presence from the scene (chiefly so that
@@ -673,7 +673,7 @@ namespace OpenSim.Region.ClientStack.Linden
             if(!IsAtestUpload && m_enableModelUploadTextureToInventory)
                 texturesFolder = llsdRequest.texture_folder_id;
 
-AssetUploader uploader =
+            AssetUploader uploader =
                 new AssetUploader(assetName, assetDes, newAsset, newInvItem, parentFolder, llsdRequest.inventory_type,
                         llsdRequest.asset_type, uploaderPath, m_HostCapsObj.HttpListener, m_dumpAssetsToFile, cost,
                         texturesFolder, nreqtextures, nreqmeshs, nreqinstances, IsAtestUpload,
@@ -2343,7 +2343,8 @@ AssetUploader uploader =
             
             osUTF8 lsl = LLSDxmlEncode2.Start(names.Count * 256 + 256);
             LLSDxmlEncode2.AddMap(lsl);
-	    int ct = 0;
+			
+            int ct = 0;
             if(names.Count == 0)
                 LLSDxmlEncode2.AddEmptyArray("agents", lsl);
             else
@@ -2415,6 +2416,7 @@ AssetUploader uploader =
                     LLSDxmlEncode2.AddElem("id", kvp.Key, lsl);
                     LLSDxmlEncode2.AddElem("is_display_name_default", is_default_name, lsl);
                     LLSDxmlEncode2.AddEndMap(lsl);
+					
                     ct++;
                 }
                 LLSDxmlEncode2.AddEndArray(lsl);
@@ -2682,7 +2684,7 @@ AssetUploader uploader =
 
                 m_timeoutTimer = new System.Timers.Timer();
                 m_timeoutTimer.Elapsed += TimedOut;
-                m_timeoutTimer.Interval = 300000;
+                m_timeoutTimer.Interval = 120000;
                 m_timeoutTimer.AutoReset = false;
                 m_timeoutTimer.Start();
 

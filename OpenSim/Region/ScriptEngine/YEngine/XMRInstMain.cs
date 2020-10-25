@@ -258,6 +258,8 @@ namespace OpenSim.Region.ScriptEngine.Yengine
             {"sensor", ScriptEventCode.sensor},
             {"http_request", ScriptEventCode.http_request},
             {"path_update", ScriptEventCode.path_update},
+            {"experience_permissions", ScriptEventCode.experience_permissions},
+            {"experience_permissions_denied", ScriptEventCode.experience_permissions_denied},
         };
     }
 }

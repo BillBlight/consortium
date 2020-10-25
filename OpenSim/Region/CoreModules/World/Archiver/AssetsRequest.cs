@@ -145,7 +145,7 @@ namespace OpenSim.Region.CoreModules.World.Archiver
                     AssetBase asset = m_assetService.Get(thiskey);
                     if(m_timeout)
                         break;
-                        
+
                     m_timeOutTimer.Enabled = false;
 
                     if(asset == null)

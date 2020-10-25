@@ -318,6 +318,7 @@ namespace OpenSim.Region.Framework.Scenes
         protected IAuthorizationService m_AuthorizationService;
         protected IInventoryService m_InventoryService;
         protected IGridService m_GridService;
+        protected IExperienceModule m_ExperienceModule;
         protected ILibraryService m_LibraryService;
         protected ISimulationService m_simulationService;
         protected IAuthenticationService m_AuthenticationService;
@@ -640,6 +641,24 @@ namespace OpenSim.Region.Framework.Scenes
                 }
 
                 return m_GridService;
+            }
+        }
+
+        public IExperienceModule ExperienceModule
+        {
+            get
+            {
+                if (m_ExperienceModule == null)
+                {
+                    m_ExperienceModule = RequestModuleInterface<IExperienceModule>();
+
+                    if (m_ExperienceModule == null)
+                    {
+                        throw new Exception("No IExperienceModule available. This could happen if the config_include folder doesn't exist or if the OpenSim.ini [Architecture] section isn't set.");
+                    }
+                }
+
+                return m_ExperienceModule;
             }
         }
 
@@ -3008,7 +3027,7 @@ namespace OpenSim.Region.Framework.Scenes
                     // We currently do this in Scene.MakeRootAgent() instead.
                     bool attached = false;
                     if (AttachmentsModule != null)
-                        attached = AttachmentsModule.AttachObject(sp, grp, 0, false, false, true);
+                        attached = AttachmentsModule.AttachObject(sp, grp, 0, false, false, true, UUID.Zero);
 
                     if (attached)
                         RootPrim.RemFlag(PrimFlags.TemporaryOnRez);
@@ -5472,19 +5491,19 @@ Label_GroupsDone:
                 return 0;
             }
 
-            if ((Util.EnvironmentTickCountSubtract(m_lastFrameTick)) < 2000)
+            if ((Util.EnvironmentTickCountSubtract(m_lastFrameTick)) < 4000)
             {
                 health+=1;
                 flags |= 1;
             }
 
-            if (Util.EnvironmentTickCountSubtract(m_lastIncoming) < 2000)
+            if (Util.EnvironmentTickCountSubtract(m_lastIncoming) < 6000)
             {
                 health+=1;
                 flags |= 2;
             }
 
-            if (Util.EnvironmentTickCountSubtract(m_lastOutgoing) < 2000)
+            if (Util.EnvironmentTickCountSubtract(m_lastOutgoing) < 6000)
             {
                 health+=1;
                 flags |= 4;
@@ -6038,7 +6057,7 @@ Environment.Exit(1);
                 case 1: // Incoming
                     m_lastIncoming = Util.EnvironmentTickCount();
                     break;
-                case 2: // Incoming
+                case 2: // Outgoing
                     m_lastOutgoing = Util.EnvironmentTickCount();
                     break;
             }

@@ -2534,6 +2534,5 @@ namespace OpenSim.Region.ScriptEngine.XEngine
             }
             return topScripts.Values;
         }
-
     }
 }
