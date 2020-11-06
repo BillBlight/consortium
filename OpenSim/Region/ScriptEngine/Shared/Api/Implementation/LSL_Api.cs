@@ -4826,12 +4826,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
             m_host.AddScriptLPS(1);
             if(linknum < 0)
             {
-                if (linknum == ScriptBaseClass.LINK_ROOT)
-                    return m_host.ParentGroup.RootPart.UUID.ToString();
                 if (linknum == ScriptBaseClass.LINK_THIS)
                     return m_host.UUID.ToString();
                 return ScriptBaseClass.NULL_KEY;
             }
+
+            if (linknum < 2)
+                return m_host.ParentGroup.RootPart.UUID.ToString();
 
             SceneObjectPart part = m_host.ParentGroup.GetLinkNumPart(linknum);
             if (part != null)
@@ -4840,9 +4841,9 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
             }
             else
             {
-                if (linknum > m_host.ParentGroup.PrimCount || (linknum == 1 && m_host.ParentGroup.PrimCount == 1))
+                if (linknum > m_host.ParentGroup.PrimCount)
                 {
-                    linknum -= (m_host.ParentGroup.PrimCount) + 1;
+                    linknum -= m_host.ParentGroup.PrimCount + 1;
 
                     List<ScenePresence> avatars = GetLinkAvatars(ScriptBaseClass.LINK_SET);
                     if (avatars.Count > linknum)
