@@ -1217,6 +1217,14 @@
     ;; if true NPCs will have no group title, if false display "- NPC -" for easy identification {true false} default: true
     ; NoNPCGroup = true
 
+    ;# {RespondToIM} {} {if true NPCs will will respond to im's, if false they wont} {true false} false
+    ;; if true NPCs will will respond to im's by relaying it on a specified chan, if false they wont {true false} default: false
+    ; RespondToIM = false
+
+    ;# {IMresponceChan} {} {The chat chanell that npc im's will be relayed to} 
+    ;; The chat chanell that npc im's will be relayed to. default: -1979
+    ; IMresponceChan = -1979
+
 
 [Terrain]
     ;# {InitialTerrain} {} {Initial terrain type} {pinhead-island flat} pinhead-island

@@ -364,6 +364,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api.Interfaces
         void osNpcSay(key npc, string message);
         void osNpcSay(key npc, int channel, string message);
         void osNpcSayTo(LSL_Key npc, LSL_Key target, int channel, string msg);
+        void osNpcSendIM(key from, key to, string message);
         void osNpcShout(key npc, int channel, string message);
         void osNpcSit(key npc, key target, int options);
         void osNpcStand(LSL_Key npc);

@@ -3331,6 +3331,23 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
                 wComm.DeliverMessageTo(TargetID, channel, npcPOS, npcNAME, npcId, msg);
         }
 
+        public void osNpcSendIM(LSL_Key from, LSL_Key to, string message)
+        {
+            CheckThreatLevel(ThreatLevel.High, "osNpcSendIM");
+
+            INPCModule module = World.RequestModuleInterface<INPCModule>();
+            if (module != null)
+            {
+                UUID fromId = new UUID(from.m_string);
+                UUID toId = new UUID(to.m_string);
+
+                if (!module.CheckPermissions(fromId, m_host.OwnerID))
+                    return;
+
+                module.SendIM(fromId, toId, World, message);
+            }
+        }
+
         public void osNpcShout(LSL_Key npc, int channel, string message)
         {
             CheckThreatLevel(ThreatLevel.High, "osNpcShout");

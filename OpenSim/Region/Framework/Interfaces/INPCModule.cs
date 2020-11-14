@@ -229,6 +229,19 @@ namespace OpenSim.Region.Framework.Interfaces
         bool Say(UUID agentID, Scene scene, string text, int channel);
 
         /// <summary>
+        /// Get the NPC to send an im.
+        /// </summary>
+        /// <param name="fromID">The UUID of the sender</param>
+        /// <param name="toID">The UUID of the reciever</param>
+        /// <param name="scene"></param>
+        /// <param name="text"></param>
+        /// <returns>
+        /// True if the operation succeeded, false if there was no such agent
+        /// or the agent was not an NPC.
+        /// </returns>
+        bool SendIM(UUID fromID, UUID toID, Scene scene, string text);
+
+        /// <summary>
         /// Get the NPC to shout something.
         /// </summary>
         /// <param name="agentID">The UUID of the NPC</param>

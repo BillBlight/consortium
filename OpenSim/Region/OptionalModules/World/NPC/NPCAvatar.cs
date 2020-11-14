@@ -73,6 +73,8 @@ namespace OpenSim.Region.OptionalModules.World.NPC
         private string m_profileAbout = "";
         private UUID m_profileImage = UUID.Zero;
         private string m_born;
+        private int m_listenchan;
+        private bool m_imrespond;
         public List<uint> SelectedObjects {get; private set;}
 
         public NPCAvatar(
@@ -641,6 +643,18 @@ namespace OpenSim.Region.OptionalModules.World.NPC
             set { m_born = value; }
         }
 
+        public int IMListenChan
+        {
+            get { return m_listenchan; }
+            set { m_listenchan = value; }
+        }
+
+        public bool IMResponce
+        {
+            get { return m_imrespond; }
+            set { m_imrespond = value; }
+        }
+
         public bool IsGroupMember(UUID groupID)
         {
             return (m_hostGroupID == groupID);
@@ -727,7 +741,14 @@ namespace OpenSim.Region.OptionalModules.World.NPC
 
         public void SendInstantMessage(GridInstantMessage im)
         {
-            OnInstantMessageToNPC?.Invoke(im);
+            if (m_imrespond == true)
+            {
+                if (im.message != "typing")
+                {
+                    SendOnChatFromClient(m_listenchan, im.fromAgentID + ":" + im.toAgentID + ":" + im.message, ChatTypeEnum.Say);
+                }
+                OnInstantMessageToNPC?.Invoke(im);
+            }
         }
 
         public void SendGenericMessage(string method, UUID invoice, List<string> message)

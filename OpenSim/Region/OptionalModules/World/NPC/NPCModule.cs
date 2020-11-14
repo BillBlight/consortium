@@ -53,6 +53,8 @@ namespace OpenSim.Region.OptionalModules.World.NPC
                 new Dictionary<UUID, NPCAvatar>();
 
 
+        private bool RespondToIM = false;
+        private int imListenChan = -1979;
 
         private NPCOptionsFlags m_NPCOptionFlags;
         public NPCOptionsFlags NPCOptionFlags {get {return m_NPCOptionFlags;}}
@@ -78,6 +80,13 @@ namespace OpenSim.Region.OptionalModules.World.NPC
 
                 if(config.GetBoolean("NoNPCGroup", true))
                     m_NPCOptionFlags |= NPCOptionsFlags.NoNPCGroup;
+
+                RespondToIM = config.GetBoolean("RespondToIM", false);
+
+                if (RespondToIM == true)
+                {
+                    imListenChan = config.GetInt("IMresponceChan", -1979);
+                }
             }
         }
 
@@ -227,8 +236,11 @@ namespace OpenSim.Region.OptionalModules.World.NPC
                         sp.CompleteMovement(npcAvatar, false);
                         sp.Grouptitle = groupTitle;
                         m_avatars.Add(npcAvatar.AgentId, npcAvatar);
+                        npcAvatar.IMListenChan = imListenChan;
+                        npcAvatar.IMResponce = RespondToIM;
+
 //                        m_log.DebugFormat("[NPC MODULE]: Created NPC {0} {1}", npcAvatar.AgentId, sp.Name);
-                    }
+                }
                 }
 //                ev.Set();
 //            });
@@ -305,6 +317,21 @@ namespace OpenSim.Region.OptionalModules.World.NPC
                 }
             }
 
+            return false;
+        }
+
+        public bool SendIM(UUID from, UUID to, Scene scene, string text)
+        {
+            if (RespondToIM == true)
+                    {
+                        ScenePresence presence = scene.GetScenePresence(from);
+
+                        GridInstantMessage im = new GridInstantMessage(scene, from, presence.Firstname + " " + presence.Lastname, to, (byte)InstantMessageDialog.MessageFromAgent,
+                             text, false, Vector3.Zero);
+
+                        scene.EventManager.TriggerIncomingInstantMessage(im);
+                        return true;
+                    }
             return false;
         }
 
