@@ -54,7 +54,7 @@ BUILDCODE=$?
 
 if [ $BUILDCODE -gt 0 ]; then
 echo -e "\e[41m
-The Build encoutered and error.\e[0m
+The Build encoutered an error.\e[0m
 "
 exit 1
 else
