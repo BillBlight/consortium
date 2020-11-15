@@ -408,6 +408,7 @@
     LocalServiceModule = "OpenSim.Services.UserAccountService.dll:GridUserService"
 
     ; if you are using display names you will want/need to set the charset to utf8mb4
+    ; on your main connections string.  example below:
     ;ConnectionString = "Data Source=localhost;Database=robust;User ID=robust;Password=***;Old Guids=true;CharSet=utf8mb4;"
 
 [AgentPreferencesService]
