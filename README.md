@@ -5,7 +5,18 @@ I, Bill Blight, have only made minor personal changes to this fork.
 
 Consortium is a fork of OpenSim. It is the "successor" to Mobius, osCore2 and TachyonSim. 
 
+Blight Notes:
+
 ***THIS MAY ONLY CURRENLTY BUILD WITH MONO 6.x or .NET 4.8***
+
+***THIS DOES NOT WORK IN STANDALONE MODE, GRID MODE ONLY***
+
+***SQLite is NOT supported!!!***
+
+***MySql ONLY***
+
+End Blight Notes.
+
 
 The goals for Consortium are simple, we want to:   
 - Add support for more of the features already in the viewer
