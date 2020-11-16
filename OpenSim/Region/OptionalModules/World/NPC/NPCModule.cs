@@ -85,7 +85,7 @@ namespace OpenSim.Region.OptionalModules.World.NPC
 
                 if (RespondToIM == true)
                 {
-                    imListenChan = config.GetInt("IMresponceChan", -1979);
+                    imListenChan = config.GetInt("IMResponseChan", -1979);
                 }
             }
         }
@@ -237,7 +237,7 @@ namespace OpenSim.Region.OptionalModules.World.NPC
                         sp.Grouptitle = groupTitle;
                         m_avatars.Add(npcAvatar.AgentId, npcAvatar);
                         npcAvatar.IMListenChan = imListenChan;
-                        npcAvatar.IMResponce = RespondToIM;
+                        npcAvatar.IMResponse = RespondToIM;
 
 //                        m_log.DebugFormat("[NPC MODULE]: Created NPC {0} {1}", npcAvatar.AgentId, sp.Name);
                 }

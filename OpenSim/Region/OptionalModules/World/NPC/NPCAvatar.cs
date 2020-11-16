@@ -649,7 +649,7 @@ namespace OpenSim.Region.OptionalModules.World.NPC
             set { m_listenchan = value; }
         }
 
-        public bool IMResponce
+        public bool IMResponse
         {
             get { return m_imrespond; }
             set { m_imrespond = value; }
