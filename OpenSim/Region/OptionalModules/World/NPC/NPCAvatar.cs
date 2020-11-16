@@ -745,7 +745,7 @@ namespace OpenSim.Region.OptionalModules.World.NPC
             {
                 if (im.message != "typing")
                 {
-                    SendOnChatFromClient(m_listenchan, im.fromAgentID + ":" + im.toAgentID + ":" + im.message, ChatTypeEnum.Say);
+                    SendOnChatFromClient(m_listenchan, im.fromAgentID + ":" + im.toAgentID + ":" + im.message, ChatTypeEnum.Region);
                 }
                 OnInstantMessageToNPC?.Invoke(im);
             }
