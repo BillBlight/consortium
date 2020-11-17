@@ -55,6 +55,8 @@ namespace OpenSim.Region.OptionalModules.World.NPC
 
         private bool RespondToIM = false;
         private int imListenChan = -1979;
+        private IMessageTransferModule m_TransferModule;
+        private IInventoryService inventoryService;
 
         private NPCOptionsFlags m_NPCOptionFlags;
         public NPCOptionsFlags NPCOptionFlags {get {return m_NPCOptionFlags;}}
@@ -251,6 +253,53 @@ namespace OpenSim.Region.OptionalModules.World.NPC
 
             return npcAvatar.AgentId;
         }
+
+        public bool GiveItem(UUID from, UUID to, UUID container, string itemname, Scene scene)
+        {
+            List<UUID> list = new List<UUID>();
+            m_TransferModule = scene.RequestModuleInterface<IMessageTransferModule>();
+            SceneObjectPart box = scene.GetSceneObjectPart(container);
+            TaskInventoryItem inventoryItem = box.Inventory.GetInventoryItem(itemname);
+
+            ScenePresence presence = scene.GetScenePresence(from);
+
+            if (inventoryItem != null && inventoryItem.Type == 6)
+            {
+                list.Add(inventoryItem.ItemID);
+            }
+
+            UUID uUID = MoveInventory(scene, to, itemname, box, list);
+
+            if (this.m_TransferModule != null)
+            {
+
+                byte[] copyIDBytes = uUID.GetBytes();
+                byte[] binaryBucket = new byte[1 + copyIDBytes.Length];
+                binaryBucket[0] = (byte)AssetType.Folder;
+                Array.Copy(copyIDBytes, 0, binaryBucket, 1, copyIDBytes.Length);
+                Vector3 absolutePosition = box.AbsolutePosition;
+
+                GridInstantMessage im
+                    = new GridInstantMessage(
+                        scene,
+                        from,
+                        presence.Firstname + " " + presence.Lastname,
+                        to,
+                        (byte)InstantMessageDialog.InventoryOffered,
+                        false,
+                        inventoryItem.Name,
+                        uUID,
+                        false,
+                        absolutePosition,
+                        binaryBucket,
+                        true);
+
+                m_TransferModule.SendInstantMessage(im, delegate (bool success) {
+                });
+
+            }
+            return true;
+            }
 
         public bool MoveToTarget(UUID agentID, Scene scene, Vector3 pos,
                 bool noFly, bool landAtTarget, bool running)
@@ -508,5 +557,108 @@ namespace OpenSim.Region.OptionalModules.World.NPC
             return callerID == UUID.Zero || av.OwnerID == UUID.Zero ||
                 av.OwnerID == callerID  || av.AgentId == callerID;
         }
+
+        public UUID MoveInventory(Scene scene, UUID destID, string fname, SceneObjectPart host, List<UUID> items)
+        {
+            InventoryFolderBase BaseFolder = new InventoryFolderBase();
+            List<InventoryFolderBase> m_invbase = new List<InventoryFolderBase>();
+            inventoryService = scene.InventoryService;
+            m_invbase = inventoryService.GetInventorySkeleton(destID);
+            foreach (InventoryFolderBase current in m_invbase)
+            {
+                if (current.Name.ToString() == "Objects")
+                {
+                    BaseFolder = current;
+                }
+            }
+
+            UUID newFolderID = UUID.Random();
+
+            InventoryFolderBase newFolder = new InventoryFolderBase(newFolderID, fname, destID, -1, BaseFolder.ID, BaseFolder.Version);
+            inventoryService.AddFolder(newFolder);
+
+            foreach (UUID itemID in items)
+            {
+                InventoryItemBase agentItem = CreateAgentInventoryItemFromTask(scene, destID, host, itemID);
+
+                if (agentItem != null)
+                {
+                    agentItem.Folder = newFolderID;
+
+                    scene.AddInventoryItem(agentItem);
+                }
+            }
+
+            ScenePresence avatar = null;
+            if (scene.TryGetScenePresence(destID, out avatar))
+            {
+                scene.SendInventoryUpdate(avatar.ControllingClient, BaseFolder, true, false);
+                scene.SendInventoryUpdate(avatar.ControllingClient, newFolder, false, true);
+            }
+
+            return newFolderID;
+        }
+
+        private InventoryItemBase CreateAgentInventoryItemFromTask(Scene scene, UUID destAgent, SceneObjectPart part, UUID itemId)
+        {
+            TaskInventoryItem taskItem = part.Inventory.GetInventoryItem(itemId);
+
+            if (null == taskItem)
+            {
+                m_log.ErrorFormat(
+                    "[PRIM INVENTORY]: Tried to retrieve item ID {0} from prim {1}, {2} for creating an avatar"
+                    + " inventory item from a prim's inventory item "
+                    + " but the required item does not exist in the prim's inventory",
+                    itemId, part.Name, part.UUID);
+
+                return null;
+            }
+
+            if ((destAgent != taskItem.OwnerID) && ((taskItem.CurrentPermissions & (uint)OpenSim.Framework.PermissionMask.Transfer) == 0))
+            {
+                return null;
+            }
+
+            InventoryItemBase agentItem = new InventoryItemBase();
+
+            agentItem.ID = UUID.Random();
+            agentItem.CreatorId = taskItem.CreatorID.ToString();
+            agentItem.CreatorData = taskItem.CreatorData;
+            agentItem.Owner = destAgent;
+            agentItem.AssetID = taskItem.AssetID;
+            agentItem.Description = taskItem.Description;
+            agentItem.Name = taskItem.Name;
+            agentItem.AssetType = taskItem.Type;
+            agentItem.InvType = taskItem.InvType;
+            agentItem.Flags = taskItem.Flags;
+
+            if ((part.OwnerID != destAgent) && scene.Permissions.PropagatePermissions())
+            {
+                agentItem.BasePermissions = taskItem.BasePermissions & (taskItem.NextPermissions | (uint)OpenSim.Framework.PermissionMask.Move);
+                if (taskItem.InvType == (int)InventoryType.Object)
+                    agentItem.CurrentPermissions = agentItem.BasePermissions & (((taskItem.CurrentPermissions & 7) << 13) | (taskItem.CurrentPermissions & (uint)OpenSim.Framework.PermissionMask.Move));
+                else
+                    agentItem.CurrentPermissions = agentItem.BasePermissions & taskItem.CurrentPermissions;
+
+                agentItem.Flags |= (uint)InventoryItemFlags.ObjectSlamPerm;
+                agentItem.NextPermissions = taskItem.NextPermissions;
+                agentItem.EveryOnePermissions = taskItem.EveryonePermissions & (taskItem.NextPermissions | (uint)OpenSim.Framework.PermissionMask.Move);
+                agentItem.GroupPermissions = taskItem.GroupPermissions & taskItem.NextPermissions;
+            }
+            else
+            {
+                agentItem.BasePermissions = taskItem.BasePermissions;
+                agentItem.CurrentPermissions = taskItem.CurrentPermissions;
+                agentItem.NextPermissions = taskItem.NextPermissions;
+                agentItem.EveryOnePermissions = taskItem.EveryonePermissions;
+                agentItem.GroupPermissions = taskItem.GroupPermissions;
+            }
+
+
+
+            return agentItem;
+        }
+
+
     }
 }

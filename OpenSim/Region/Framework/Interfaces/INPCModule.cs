@@ -241,6 +241,8 @@ namespace OpenSim.Region.Framework.Interfaces
         /// </returns>
         bool SendIM(UUID fromID, UUID toID, Scene scene, string text);
 
+        bool GiveItem(UUID fromID, UUID toID, UUID containerID, string itemName, Scene scene);
+
         /// <summary>
         /// Get the NPC to shout something.
         /// </summary>

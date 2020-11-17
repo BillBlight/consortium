@@ -3028,6 +3028,24 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
             return new LSL_Key(x.ToString());
         }
 
+        public void osNpcGiveItem(LSL_Key from, LSL_Key to, LSL_Key container, string item)
+        {
+            CheckThreatLevel(ThreatLevel.High, "osNpcGiveItem");
+
+            INPCModule module = World.RequestModuleInterface<INPCModule>();
+            if (module != null)
+            {
+                UUID fromId = new UUID(from.m_string);
+                UUID toId = new UUID(to.m_string);
+                UUID containerID = new UUID(container.m_string);
+
+                if (!module.CheckPermissions(fromId, m_host.OwnerID))
+                    return;
+
+                module.GiveItem(fromId, toId, containerID, item, World);
+            }
+        }
+
         /// <summary>
         /// Save the current appearance of the NPC permanently to the named notecard.
         /// </summary>

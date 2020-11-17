@@ -628,6 +628,11 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             return m_OSSL_Functions.osNpcCreate(user, name, position, cloneFrom, options);
         }
 
+        public void osNpcGiveItem(key from, key to, key container, string item)
+        {
+            m_OSSL_Functions.osNpcGiveItem(from, to, container, item);
+        }
+
         public key osNpcSaveAppearance(key npc, LSL_String notecard)
         {
             return m_OSSL_Functions.osNpcSaveAppearance(npc, notecard);
