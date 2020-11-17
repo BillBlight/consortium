@@ -743,12 +743,12 @@ namespace OpenSim.Region.OptionalModules.World.NPC
         {
             if (m_imrespond == true)
             {
-                if (im.message != "typing")
+                if (im.dialog == 0)
                 {
                     SendOnChatFromClient(m_listenchan, im.fromAgentID + ":" + im.toAgentID + ":" + im.message, ChatTypeEnum.Region);
                 }
-                OnInstantMessageToNPC?.Invoke(im);
             }
+            OnInstantMessageToNPC?.Invoke(im);
         }
 
         public void SendGenericMessage(string method, UUID invoice, List<string> message)
