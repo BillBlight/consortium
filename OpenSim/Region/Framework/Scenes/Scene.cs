@@ -1331,6 +1331,8 @@ namespace OpenSim.Region.Framework.Scenes
                             sb.Append(alias[i]);
                             fm.AddOpenSimExtraFeature("GridURLAlias", osStringBuilderCache.GetStringAndRelease(sb));
                         }
+                        else
+                            fm.AddOpenSimExtraFeature("GridURLAlias", string.Empty);
                     }
 
                     if (!fm.TryGetOpenSimExtraFeature("search-server-url", out osdtmp))
