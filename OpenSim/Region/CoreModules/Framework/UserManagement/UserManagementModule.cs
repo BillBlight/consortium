@@ -476,10 +476,14 @@ namespace OpenSim.Region.CoreModules.Framework.UserManagement
 
             if (userdata.ServerURLs != null)
             {
-                if(userdata.ServerURLs.ContainsKey(serverType) && userdata.ServerURLs[serverType] != null)
-                    return userdata.ServerURLs[serverType].ToString();
-                else
-                    return string.Empty;
+                if(userdata.ServerURLs.TryGetValue(serverType, out object ourl) && ourl != null)
+                {
+                    string turl = ourl as string;
+                    OSHHTPHost otmp = new OSHHTPHost(turl);
+                    if (otmp.IsValidHost)
+                        return otmp.URI;
+                }
+                return string.Empty;
             }
 
             if (!string.IsNullOrEmpty(userdata.HomeURL))
@@ -506,7 +510,12 @@ namespace OpenSim.Region.CoreModules.Framework.UserManagement
                     }
 
                     if (userdata.ServerURLs != null && userdata.ServerURLs.TryGetValue(serverType, out object ourl) && ourl != null)
-                        return ourl.ToString();
+                    {
+                        string turl = ourl as string;
+                        OSHHTPHost otmp = new OSHHTPHost(turl);
+                        if (otmp.IsValidHost)
+                            return otmp.URI;
+                    }
                 }
             }
             return string.Empty;
@@ -537,10 +546,14 @@ namespace OpenSim.Region.CoreModules.Framework.UserManagement
 
             if (userdata.ServerURLs != null)
             {
-                if (userdata.ServerURLs.ContainsKey(serverType) && userdata.ServerURLs[serverType] != null)
-                    return userdata.ServerURLs[serverType].ToString();
-                else
-                    return string.Empty;
+                if (userdata.ServerURLs.TryGetValue(serverType, out object ourl) && ourl != null)
+                {
+                    string turl = ourl as string;
+                    OSHHTPHost otmp = new OSHHTPHost(turl);
+                    if (otmp.IsValidHost)
+                        return otmp.URI;
+                }
+                return string.Empty;
             }
 
             if (!recentFail && !string.IsNullOrEmpty(userdata.HomeURL))
@@ -570,8 +583,13 @@ namespace OpenSim.Region.CoreModules.Framework.UserManagement
                         recentFail = true;
                     }
 
-                    if (userdata.ServerURLs != null && userdata.ServerURLs.ContainsKey(serverType) && userdata.ServerURLs[serverType] != null)
-                        return userdata.ServerURLs[serverType].ToString();
+                    if (userdata.ServerURLs != null && userdata.ServerURLs.TryGetValue(serverType, out object ourl) && ourl != null)
+                    {
+                        string turl = ourl as string;
+                        OSHHTPHost otmp = new OSHHTPHost(turl);
+                        if (otmp.IsValidHost)
+                            return otmp.URI;
+                    }
                 }
             }
             return string.Empty;
